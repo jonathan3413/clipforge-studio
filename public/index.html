@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0e13">
+    <title>ClipForge Studio</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="brand" href="/">
+                <span class="brand-mark">CF</span>
+                <span>ClipForge <span class="brand-light">Studio</span></span>
+            </a>
+            <span class="status-pill">
+                <span class="status-dot"></span>
+                LOCAL EDITOR
+            </span>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="eyebrow">VIDEO WORKSPACE / 03.0</div>
+                <h1>Cut it. Caption it.<br><span>See it before you save it.</span></h1>
+                <p>
+                    Potong video, atur subtitle, lalu periksa hasil render
+                    langsung di browser sebelum mengunduhnya.
+                </p>
+            </section>
+
+            <form id="clipForm">
+                <section class="panel">
+                    <div class="section-heading">
+                        <div>
+                            <span class="step-number">01</span>
+                            <h2>Video source</h2>
+                        </div>
+                        <span class="section-note">MP4 · Maks. 1 GB</span>
+                    </div>
+
+                    <label class="upload-card" for="videoFile">
+                        <span class="upload-icon">↑</span>
+                        <strong>Pilih video MP4</strong>
+                        <span id="videoName" class="muted">
+                            Klik untuk memilih file dari komputer
+                        </span>
+                        <input id="videoFile" name="video" type="file"
+                               accept=".mp4,video/mp4" required>
+                    </label>
+
+                    <div id="sourcePreviewPanel" class="source-preview" hidden>
+                        <div class="preview-heading">
+                            <span>PREVIEW VIDEO SUMBER</span>
+                            <span id="sourceDuration" class="muted"></span>
+                        </div>
+                        <video id="sourceVideo" controls playsinline></video>
+
+                        <div class="timeline-controls">
+                            <label>
+                                <span>Mulai klip</span>
+                                <input id="startTime" name="start" type="text"
+                                       value="00:00:00" placeholder="00:00:00"
+                                       required>
+                            </label>
+                            <label>
+                                <span>Akhir klip</span>
+                                <input id="endTime" name="end" type="text"
+                                       placeholder="00:00:10" required>
+                            </label>
+                        </div>
+
+                        <div class="range-row">
+                            <label for="seekSlider">Geser untuk melihat video</label>
+                            <span id="currentTimeLabel">00:00:00</span>
+                        </div>
+                        <input id="seekSlider" type="range" min="0" max="100"
+                               value="0" step="0.1">
+                        <div class="range-labels">
+                            <span>00:00</span>
+                            <span id="rangeEndLabel">Durasi video</span>
+                        </div>
+                        <p class="hint">
+                            Kamu juga bisa mengisi waktu mulai dan akhir secara manual.
+                            Format yang diterima: HH:MM:SS, MM:SS, atau detik.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="section-heading">
+                        <div>
+                            <span class="step-number">02</span>
+                            <h2>Subtitle text</h2>
+                        </div>
+                        <span class="section-note">TXT atau tempel teks</span>
+                    </div>
+
+                    <label class="field-label" for="transcriptFile">
+                        Pilih file TXT <span class="muted">(opsional)</span>
+                    </label>
+                    <div class="file-row">
+                        <input id="transcriptFile" name="transcriptFile"
+                               type="file" accept=".txt,text/plain">
+                        <span id="transcriptName" class="muted">Belum ada file</span>
+                    </div>
+
+                    <div class="or-divider"><span>ATAU TEMPEL LANGSUNG</span></div>
+
+                    <label class="field-label" for="transcriptText">
+                        Transkrip bertimestamp
+                    </label>
+                    <textarea id="transcriptText" name="transcriptText"
+                              rows="8"
+                              placeholder="00:00:00 Halo, selamat datang!
+00:00:03 Hari ini kita akan membahas sesuatu.
+00:00:06 Mari kita mulai."></textarea>
+
+                    <div class="textarea-footer">
+                        <span id="characterCount">0 karakter</span>
+                        <span>Tanpa batas karakter aplikasi</span>
+                    </div>
+
+                    <details class="format-help">
+                        <summary>Lihat format subtitle yang didukung</summary>
+                        <pre>00:00:00 Halo, selamat datang!
+00:00:03 Hari ini kita belajar.
+00:00:06 Mari kita mulai.</pre>
+                        <p>
+                            Setiap baris diawali timestamp. Subtitle akan tampil
+                            sampai timestamp berikutnya, atau sekitar 3 detik
+                            untuk subtitle terakhir. Gunakan timestamp sesuai
+                            waktu asli video, bukan waktu relatif klip.
+                        </p>
+                    </details>
+                    <p class="hint">
+                        Jika kotak teks berisi teks, teks tersebut dipakai.
+                        File TXT digunakan jika kotak teks kosong.
+                    </p>
+                </section>
+
+                <section class="panel">
+                    <div class="section-heading">
+                        <div>
+                            <span class="step-number">03</span>
+                            <h2>Subtitle style</h2>
+                        </div>
+                        <span class="section-note">Pilih tampilan</span>
+                    </div>
+
+                    <div class="template-grid">
+                        <label class="template-option">
+                            <input type="radio" name="template" value="classic" checked>
+                            <span class="template-card">
+                                <span class="sample classic-sample">Contoh subtitle</span>
+                                <strong>Classic</strong>
+                                <small>Putih · Outline hitam</small>
+                            </span>
+                        </label>
+
+                        <label class="template-option">
+                            <input type="radio" name="template" value="viral">
+                            <span class="template-card">
+                                <span class="sample viral-sample">CONTOH SUBTITLE</span>
+                                <strong>Viral</strong>
+                                <small>Kuning · Tebal</small>
+                            </span>
+                        </label>
+
+                        <label class="template-option">
+                            <input type="radio" name="template" value="neon">
+                            <span class="template-card">
+                                <span class="sample neon-sample">Contoh subtitle</span>
+                                <strong>Neon</strong>
+                                <small>Hijau · Kontras tinggi</small>
+                            </span>
+                        </label>
+
+                        <label class="template-option">
+                            <input type="radio" name="template" value="minimal">
+                            <span class="template-card">
+                                <span class="sample minimal-sample">Contoh subtitle</span>
+                                <strong>Minimal</strong>
+                                <small>Putih · Latar gelap</small>
+                            </span>
+                        </label>
+
+                        <label class="template-option">
+                            <input type="radio" name="template" value="cinematic">
+                            <span class="template-card">
+                                <span class="sample cinematic-sample">Contoh subtitle</span>
+                                <strong>Cinematic</strong>
+                                <small>Serif · Elegan</small>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="settings-grid">
+                        <label>
+                            <span class="field-label">Posisi subtitle</span>
+                            <select id="position" name="position">
+                                <option value="bottom">Bawah</option>
+                                <option value="middle">Tengah</option>
+                                <option value="top">Atas</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            <span class="field-label">Jarak dari tepi</span>
+                            <div class="margin-control">
+                                <input id="margin" name="margin" type="range"
+                                       min="0" max="200" value="40" step="5">
+                                <strong id="marginValue">40 px</strong>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="preview-demo">
+                        <span class="demo-label">SIMULASI POSISI SUBTITLE</span>
+                        <div id="subtitleStage" class="subtitle-stage pos-bottom">
+                            <span id="subtitleDemo" class="subtitle-demo classic">
+                                Contoh subtitle muncul di sini
+                            </span>
+                        </div>
+                        <p class="hint">
+                            Ini simulasi tampilan. Posisi pada video hasil render
+                            diterapkan oleh FFmpeg dan dapat sedikit berbeda
+                            bergantung pada resolusi video.
+                        </p>
+                    </div>
+                </section>
+
+                <div id="errorMessage" class="error-message" role="alert" hidden></div>
+
+                <section class="render-panel">
+                    <div>
+                        <span class="eyebrow">READY TO RENDER</span>
+                        <h2>Render your clip</h2>
+                        <p>Periksa video hasilnya sebelum mengunduh.</p>
+                    </div>
+                    <button id="processButton" class="primary-button" type="submit">
+                        <span id="buttonText">Render video ↗</span>
+                    </button>
+                </section>
+            </form>
+
+            <section id="progressPanel" class="panel progress-panel" hidden>
+                <div class="spinner"></div>
+                <div>
+                    <h3 id="progressTitle">Sedang merender video...</h3>
+                    <p id="progressMessage">
+                        FFmpeg sedang memotong video dan menerapkan subtitle.
+                    </p>
+                </div>
+            </section>
+
+            <section id="resultPanel" class="panel result-panel" hidden>
+                <div class="section-heading">
+                    <div>
+                        <span class="step-number success-number">04</span>
+                        <h2>Preview hasil render</h2>
+                    </div>
+                    <span class="success-pill">RENDER SELESAI</span>
+                </div>
+
+                <p class="muted result-description">
+                    Putar video di bawah ini. Kalau belum sesuai, ubah pengaturan
+                    lalu render ulang.
+                </p>
+
+                <div class="output-player">
+                    <video id="resultVideo" controls playsinline preload="metadata"></video>
+                </div>
+
+                <div id="resultDetails" class="result-details"></div>
+
+                <div class="result-actions">
+                    <a id="downloadLink" class="primary-button download-button"
+                       href="#" download>
+                        Unduh MP4 ↓
+                    </a>
+                    <button id="rerenderButton" class="secondary-button" type="button">
+                        Render ulang ↻
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <span>CLIPFORGE STUDIO</span>
+            <span>Local processing · FFmpeg powered</span>
+        </footer>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

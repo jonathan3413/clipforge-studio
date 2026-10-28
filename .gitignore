@@ -1,0 +1,14 @@
+
+node_modules/
+.venv/
+venv/
+uploads/
+outputs/
+.env
+.env.*
+!.env.example
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.log
